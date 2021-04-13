@@ -1,13 +1,17 @@
 package br.com.coldigogeladeiras.rest;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -77,4 +81,35 @@ public class ProdutoRest extends UtilRest{
 			return this.buildErrorResponse(e.getMessage());
 		}
 	}
+	
+	@DELETE
+	@Path("/excluir/{id}")
+	@Consumes("application/*")
+
+	public Response excluir(@PathParam("id") int id) {
+		
+		try {
+			Conexao conec = new Conexao();
+			Connection conexao = conec.abrirConexao();
+			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao);
+		
+			boolean retorno = jdbcProduto.deletar(id);
+			
+			String msg = "";
+			if(retorno) {
+				msg = "Produto excluido com sucesso!";
+			}else {
+				msg = "Erro ao excluir o produto.";
+			}
+			
+			conec.fecharConexao();
+			
+			return this.buildResponse(msg);
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+			return this.buildErrorResponse(e.getMessage());
+		}
+	}
+	
 }
