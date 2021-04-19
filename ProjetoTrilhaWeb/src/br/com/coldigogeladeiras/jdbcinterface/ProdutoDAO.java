@@ -12,4 +12,5 @@ public interface ProdutoDAO {
 	public List<JsonObject> buscarPorNome(String nome);
 	public boolean deletar(int id);
 	public Produto buscarPorId(int id);
+	public boolean alterar(Produto produto);
 }

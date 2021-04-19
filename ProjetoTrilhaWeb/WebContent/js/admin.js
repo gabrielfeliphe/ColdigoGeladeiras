@@ -1,6 +1,7 @@
 //Cria o objeto COLDIGO, que será usado como identificador do projeto
 COLDIGO = new Object();
 
+
 $(document).ready(function(){
 	
 	//Cria uma constante com o valor da URI rais do REST
@@ -12,6 +13,9 @@ $(document).ready(function(){
 	//Função para carregamento de páginas de conteúdo que
 	//recee como parâmetro o nome da pasta com a página a ser carregada
 	COLDIGO.carregaPagina= function(pagename){
+		//Remove o contúdo criado na abertura de uma janela pelo modal JQueryUI
+		if($(".ui-dialog"))
+			$(".ui-dialog").remove();
 		//limpa a tag section, excluindo todo o conteúdo de dentro dela
 		$("section").empty();
 		//carrega a página solicitada dentro da tag section
@@ -41,9 +45,12 @@ $(document).ready(function(){
 		};
 });
 
+
 //Exibe os valores financeiros no formato da moeda Real
 
 COLDIGO.formatarDinheiro = function (valor){
 	return valor.toFixed(2).replace('.',',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
 	
 }
+
+
