@@ -1,0 +1,47 @@
+<script src= "../../js/marca.js"></script>
+
+<h2>Registro de Marcas</h2>
+<form name="frmAddMarca" id="addMarca" class="frmInserir">
+	<fieldset>
+	<legend>Nova Marca</legend>
+	<table>
+		<tr>
+			<th>Marca</th>
+			<td>
+				<input type="text" name="marca">
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<button type="button" onclick="COLDIGO.marca.cadastrar()">Cadastrar</button>
+				<button type="reset">Limpar</button>
+			</td>
+		</tr>
+		</table>
+	</fieldset>
+</form>
+<h3>Marcas Registradas</h3>
+<form id= "filtraMarca" class="frmFiltrar">
+	<fieldset>
+		<legend>Filtrar</legend>
+		<input type="text" name="txtbusca" id="campoBuscaMarca" placeholder="Pesquise pela Marca">
+		<button type="button" onclick="COLDIGO.marcas.buscarMarcas()">Buscar</button>
+	</fieldset>
+</form>
+<div id="listaMarcas" class="listaRegistros">
+</div>
+
+
+<div id="modalEditaProduto" class = "modalEditar">
+	<form name="frmEditaProduto" id = "editaProduto" class="frmEditar">
+		<table>
+				<th>Marca</th>
+				<td>
+					<select name="marcaId" id="selMarcaEdicao">
+						<option value="" class="buscando">Aguarde, buscando marcas...</option>
+					</select>
+				</td>
+		</table>
+		<input type="hidden" name="idProduto">
+	</form>
+</div>

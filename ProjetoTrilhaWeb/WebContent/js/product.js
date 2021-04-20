@@ -164,18 +164,34 @@ $(document).ready(function(){
 	
 	COLDIGO.produto.excluir = function(id){
 		
+			var modal = {
+				title: "Mensagem",
+				height: 250,
+				width: 400,
+				modal: true,
+				buttons: {
+					"OK": function(){
+						$(this).dialog("close");
+						$.ajax({
+							type: "DELETE",
+							url: COLDIGO.PATH + "produto/excluir/"+id,
+							success: function (msg){
+								COLDIGO.exibirAviso(msg);
+								COLDIGO.produto.buscar();
+							},
+							error: function(info){
+								COLDIGO.exibirAviso("Erro ao excluir produto: "+ info.status + " - " + info.statusText);
+							},
+						});
+					},
+					"Cancelar" : function(){
+						$(this).dialog("close");
+					}
+				}
+			};
+			$("#modalAviso").html("Deseja realmente deletar esse produto ?");
+			$("#modalAviso").dialog(modal);
 		
-		$.ajax({
-			type: "DELETE",
-			url: COLDIGO.PATH + "produto/excluir/"+id,
-			success: function (msg){
-				COLDIGO.exibirAviso(msg);
-				COLDIGO.produto.buscar();
-			},
-			error: function(info){
-				COLDIGO.exibirAviso("Erro ao excluir produto: "+ info.status + " - " + info.statusText);
-			},
-		});
 	};
 	
 	COLDIGO.produto.exibirEdicao = function(id){
@@ -211,7 +227,8 @@ $(document).ready(function(){
 						modal: true,
 						buttons:{
 							"Salvar": function(){
-								
+								COLDIGO.produto.editar();
+								$(this).dialog("close"); // ADICIONAR ESSA LINHA PARA RETIRAR OS ERRORS DE CLOSE
 							},
 							"Cancelar": function(){
 								$(this).dialog("close");
@@ -232,5 +249,31 @@ $(document).ready(function(){
 			}
 		});
 	};
+	
+	COLDIGO.produto.editar = function (){
+		
+		var produto = new Object();
+		produto.id = document.frmEditaProduto.idProduto.value;
+		produto.categoria = document.frmEditaProduto.categoria.value;
+		produto.marcaId = document.frmEditaProduto.marcaId.value;
+		produto.modelo = document.frmEditaProduto.modelo.value;
+		produto.capacidade = document.frmEditaProduto.capacidade.value;
+		produto.valor = document.frmEditaProduto.valor.value;
+		
+		$.ajax({
+			type: "PUT",
+			url: COLDIGO.PATH + "produto/alterar",
+			data: JSON.stringify(produto),
+			success: function(msg){
+				COLDIGO.exibirAviso(msg);
+				COLDIGO.produto.buscar();
+				$("#modalEditaProduto").dialog("close");
+			},
+			error: function(info){
+				COLDIGO.exibirAviso("Erro ao editar produto: "+info.status+" - "+info.statusText);
+			}
+		});
+		
+	}
 	
 });
