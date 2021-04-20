@@ -227,3 +227,14 @@ section h2, section h3{
 	height: 20px;
 	cursor: pointer;
 }
+
+
+.listaRegistrosMarcas table{
+	min-width: 20%;
+	max-width: 40%;
+}
+
+
+.listaRegistrosMarcas td{
+	text-align: center;
+}

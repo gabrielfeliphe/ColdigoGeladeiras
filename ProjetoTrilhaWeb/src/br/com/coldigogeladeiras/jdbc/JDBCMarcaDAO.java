@@ -6,6 +6,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.JsonObject;
+
 import br.com.coldigogeladeiras.jdbcinterface.MarcaDAO;
 import br.com.coldigogeladeiras.modelo.Marca;
 
@@ -69,6 +71,53 @@ public class JDBCMarcaDAO implements MarcaDAO{
 		
 		
 		return listMarcas;
+	}
+
+	public List<JsonObject> buscarPorNome(String nome) {
+		
+				//Inicia criação do comando SQL de busca
+		
+				String comando = "SELECT marcas.*, marcas.nome as marca FROM marcas ";
+				//Se o nome não estiver vazio ...
+				
+				if(!nome.equals("")) {
+					//concatena no comando o WHERE buscando no nome do produto
+					//o texto da variável nome
+					
+					comando +="WHERE nome LIKE '%" + nome + "%' ";
+					
+				}
+				
+				//Finaliza o comando ordenando alfabeticamente por
+				//categora, marca e depois modelo.
+				comando += "ORDER BY nome ASC, marcas.nome ASC";
+				
+				List<JsonObject> listaMarcas = new ArrayList<JsonObject>();
+				JsonObject produto = null;
+				
+				try {
+					Statement stmt = conexao.createStatement();
+					ResultSet rs = stmt.executeQuery(comando);
+					
+					while(rs.next()) {
+						
+						int id = rs.getInt("id");
+						String marcaNome = rs.getString("marca");
+											
+						produto = new JsonObject();
+						produto.addProperty("id", id);
+						
+						produto.addProperty("marcaNome",marcaNome);
+						
+						listaMarcas.add(produto);
+						
+					}
+					
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+				
+				return listaMarcas;
 	}
 	
 }
