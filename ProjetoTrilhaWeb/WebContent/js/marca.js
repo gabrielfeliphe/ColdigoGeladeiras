@@ -2,6 +2,37 @@ COLDIGO.marcas = new Object();
 
 $(document).ready(function(){
 	
+	
+	
+	COLDIGO.marcas.cadastrarMarcas = function(){
+
+		var marca = new Object();
+		
+		marca.nome = document.frmAddMarca.novaMarca.value;
+
+		
+		if (marca.nome==""){
+			COLDIGO.exibirAviso("Preencha todos os campos!");
+		}else{
+			
+			$.ajax({
+				type: "POST",
+				url: COLDIGO.PATH + "marca/inserir",
+				data: JSON.stringify(marca),
+				success: function(msg){
+					COLDIGO.exibirAviso(msg);
+					$("addMarca").trigger("reset");
+					COLDIGO.marcas.buscarMarcas();
+
+				},
+				error: function(info){
+					COLDIGO.exibirAviso("Erro ao cadastrar um novo produto: "+info.status+" - "+info.statusText);
+					
+				}
+			});
+		}
+	};
+	
 	COLDIGO.marcas.buscarMarcas = function(){ // PRIMEIRO PARTO FEITO, ESTOU RECEBENDO AS MARCAS DA BACKEND
 	
 		var valorBusca = $("#campoBuscaMarca").val();
@@ -13,11 +44,7 @@ $(document).ready(function(){
 			data: "valorBusca="+valorBusca,
 			success: function(dados){
 				
-				console.log(dados);
-				
 				dados = JSON.parse(dados);
-				
-				console.log("tratado :"+dados);
 				
 				$("#listaMarcas").html(COLDIGO.marcas.exibirMarcas(dados));
 			},
@@ -27,6 +54,8 @@ $(document).ready(function(){
 				
 		});	
 	};
+	
+	COLDIGO.marcas.buscarMarcas(); // Fazer a instancia para a página sempre carregar a marca
 	
 	COLDIGO.marcas.exibirMarcas = function(listaDeMarcas){
 		
