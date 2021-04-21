@@ -87,4 +87,37 @@ $(document).ready(function(){
 		
 	};
 	
+	
+	COLDIGO.marcas.excluir = function(id){
+		
+		var modal = {
+				title: "Mensagem",
+				height: 250,
+				width: 400,
+				modal: true,
+				buttons: {
+					"OK": function(){
+						$(this).dialog("close");
+						$.ajax({
+							type: "DELETE",
+							url: COLDIGO.PATH + "marca/excluir/"+id,
+							success: function (msg){
+								COLDIGO.exibirAviso(msg);
+								COLDIGO.marcas.buscarMarcas();
+							},
+							error: function(info){
+								COLDIGO.exibirAviso("Erro ao excluir produto: "+ info.status + " - " + info.statusText);
+							},
+						});
+					},
+					"Cancelar" : function(){
+						$(this).dialog("close");
+					}
+				}
+			};
+			$("#modalAviso").html("Deseja realmente deletar esse produto ?");
+			$("#modalAviso").dialog(modal);
+		
+	};
+	
 });

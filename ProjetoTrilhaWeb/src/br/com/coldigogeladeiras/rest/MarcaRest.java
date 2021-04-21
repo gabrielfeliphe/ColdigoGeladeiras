@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -94,6 +96,36 @@ public class MarcaRest extends UtilRest {
 					msg = "Marca cadastrada com sucesso!";
 				}else {
 					msg = "Erro ao cadastrar marca.";
+				}
+				
+				conec.fecharConexao();
+				
+				return this.buildResponse(msg);
+				
+			}catch(Exception e) {
+				e.printStackTrace();
+				return this.buildErrorResponse(e.getMessage());
+			}
+		}
+		
+		@DELETE
+		@Path("/excluir/{id}")
+		@Consumes("application/*")
+
+		public Response excluir(@PathParam("id") int id) {
+			
+			try {
+				Conexao conec = new Conexao();
+				Connection conexao = conec.abrirConexao();
+				JDBCMarcaDAO jdbcProduto = new JDBCMarcaDAO(conexao);
+			
+				boolean retorno = jdbcProduto.deletar(id);
+				
+				String msg = "";
+				if(retorno) {
+					msg = "Marca excluida com sucesso!";
+				}else {
+					msg = "Erro ao excluir a Marca, se existir um produto a utilizando, ela não pode ser deletada!";
 				}
 				
 				conec.fecharConexao();
