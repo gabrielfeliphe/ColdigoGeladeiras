@@ -203,6 +203,7 @@ $(document).ready(function(){
 			data: "id="+id,
 			success: function(produto){
 				
+				console.log(produto);
 				
 				document.frmEditaProduto.idProduto.value = produto.id;
 				document.frmEditaProduto.modelo.value = produto.modelo;

@@ -12,6 +12,7 @@ import com.google.gson.JsonObject;
 
 import br.com.coldigogeladeiras.jdbcinterface.MarcaDAO;
 import br.com.coldigogeladeiras.modelo.Marca;
+import br.com.coldigogeladeiras.modelo.Produto;
 
 public class JDBCMarcaDAO implements MarcaDAO{
 	
@@ -95,7 +96,7 @@ public class JDBCMarcaDAO implements MarcaDAO{
 				comando += "ORDER BY nome ASC, marcas.nome ASC";
 				
 				List<JsonObject> listaMarcas = new ArrayList<JsonObject>();
-				JsonObject produto = null;
+				JsonObject marca = null;
 				
 				try {
 					Statement stmt = conexao.createStatement();
@@ -106,12 +107,12 @@ public class JDBCMarcaDAO implements MarcaDAO{
 						int id = rs.getInt("id");
 						String marcaNome = rs.getString("marca");
 											
-						produto = new JsonObject();
-						produto.addProperty("id", id);
+						marca = new JsonObject();
+						marca.addProperty("id", id);
 						
-						produto.addProperty("marcaNome",marcaNome);
+						marca.addProperty("marcaNome",marcaNome);
 						
-						listaMarcas.add(produto);
+						listaMarcas.add(marca);
 						
 					}
 					
@@ -157,6 +158,52 @@ public class JDBCMarcaDAO implements MarcaDAO{
 			p = this.conexao.prepareStatement(comando);
 			p.setInt(1, id);
 			p.execute();
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	public Marca buscarPorId(int id) {
+		
+		String comando = "SELECT * FROM marcas WHERE marcas.id =?";
+		Marca marca = new Marca();
+		
+		try {
+			
+			PreparedStatement p = this.conexao.prepareStatement(comando);
+			p.setInt(1, id);
+			ResultSet rs = p.executeQuery();
+			while(rs.next()) {
+				
+				String nomeMarca = rs.getString("nome");
+				
+				marca.setNome(nomeMarca);
+				marca.setId(id);
+	
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return marca;
+	}
+	
+	public boolean alterar(Marca marca) {
+		
+		System.out.println("nome "+marca.getNome() + "id: "+marca.getId());
+		
+		String comando = "UPDATE marcas "
+				+"SET nome=?" 
+				+" WHERE id=?";
+		
+		PreparedStatement p;
+		try {
+			p = this.conexao.prepareStatement(comando);
+			p.setString(1, marca.getNome());
+			p.setInt(2, marca.getId());
+			p.executeUpdate();
+
 		}catch(SQLException e) {
 			e.printStackTrace();
 			return false;

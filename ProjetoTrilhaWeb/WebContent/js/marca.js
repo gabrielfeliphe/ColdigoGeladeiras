@@ -26,7 +26,7 @@ $(document).ready(function(){
 
 				},
 				error: function(info){
-					COLDIGO.exibirAviso("Erro ao cadastrar um novo produto: "+info.status+" - "+info.statusText);
+					COLDIGO.exibirAviso("Erro ao cadastrar um nova marca: "+info.status+" - "+info.statusText);
 					
 				}
 			});
@@ -106,7 +106,7 @@ $(document).ready(function(){
 								COLDIGO.marcas.buscarMarcas();
 							},
 							error: function(info){
-								COLDIGO.exibirAviso("Erro ao excluir produto: "+ info.status + " - " + info.statusText);
+								COLDIGO.exibirAviso("Erro ao excluir marca: "+ info.status + " - " + info.statusText);
 							},
 						});
 					},
@@ -115,9 +115,81 @@ $(document).ready(function(){
 					}
 				}
 			};
-			$("#modalAviso").html("Deseja realmente deletar esse produto ?");
+			$("#modalAviso").html("Deseja realmente deletar esse marca ?");
 			$("#modalAviso").dialog(modal);
 		
 	};
 	
+	COLDIGO.marcas.exibirEdicao = function(id){
+		
+		console.log("exibir edicao id: "+id);
+		
+		$.ajax({
+			type: "GET",
+			url: COLDIGO.PATH + "marca/buscarPorId",
+			data: "id="+id,
+			success: function(marca){
+				
+				console.log(marca);
+				
+				document.frmEditaMarca.idMarca.value = marca.id;
+				document.frmEditaMarca.marcaId.value = marca.nome;
+				
+				
+				var selMarcaEdicao = document.getElementById ('selMarcaEdicao');		
+				
+				var modalEditaMarca = {
+						title: "Editar Marca",
+						height: 200,
+						width: 350,
+						modal: true,
+						buttons:{
+							"Salvar": function(){
+								COLDIGO.marcas.editarMarca();
+								$(this).dialog("close"); // ADICIONAR ESSA LINHA PARA RETIRAR OS ERRORS DE CLOSE
+							},
+							"Cancelar": function(){
+								$(this).dialog("close");
+							}
+						},
+						close: function(){
+							//caso o usuário simplesmente feche a caixa de edição
+							// nao deve acontecar nada
+						}
+				};
+				
+				$("#modalEditaMarca").dialog(modalEditaMarca);
+				
+			},
+			error: function(info){
+				
+				COLDIGO.exibirAviso("Erro ao buscar a marca para edição: "+info.status+" - "+info.statusText);
+			}
+		});
+		
+	};
+	
+	
+	COLDIGO.marcas.editarMarca = function (id){
+			
+		var marca = new Object();
+		
+		marca.id = document.frmEditaMarca.idMarca.value; // TEM QUE SER O MESMO NOME DE ATRIBUTO DA CLASSE;
+		marca.nome= document.frmEditaMarca.marcaId.value;
+		
+		$.ajax({
+			type: "PUT",
+			url: COLDIGO.PATH + "marca/alterar",
+			data: JSON.stringify(marca),
+			success: function(msg){
+				COLDIGO.exibirAviso(msg);
+				COLDIGO.marcas.buscarMarcas();
+				$("#modalEditaMarca").dialog("close");
+			},
+			error: function(info){
+				COLDIGO.exibirAviso("Erro ao editar marca: "+info.status+" - "+info.statusText);
+			}
+		});
+		
+	};
 });
