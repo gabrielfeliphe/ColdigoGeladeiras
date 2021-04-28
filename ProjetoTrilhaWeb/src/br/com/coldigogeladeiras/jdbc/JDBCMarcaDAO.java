@@ -211,4 +211,56 @@ public class JDBCMarcaDAO implements MarcaDAO{
 		return true;
 	}
 	
+	public boolean verificaExistencia(int id) {
+		
+		boolean retorno = true;
+		
+		String comando = "SELECT * FROM marcas WHERE id = ?";
+		PreparedStatement p;
+		try {
+			p = this.conexao.prepareStatement(comando);
+			p.setInt(1, id);
+			ResultSet rs = p.executeQuery();
+			
+				if(rs.next()) { // A PROPRIA INSTRUÇÃO NEXT JA NOS AUXILIA, POIS SE EXISTE ALGO NA TABELA ELA EXECUTA O TRECHO, CASO NAO VAI PARA O ELSE
+					retorno = true;
+				}else {
+					retorno = false;
+				}
+			}catch(SQLException e) {
+			e.printStackTrace();
+			retorno = false;
+		}
+		
+		return retorno;
+	}
+	
+	public boolean verificaProdutosCadastrados(int id) {
+		
+			String comando = "SELECT count(*) as quantidade_produtos FROM produtos WHERE marcas_id = ?";
+			PreparedStatement p;
+			int quantidade_produtos = 0;
+			try {
+				
+				p = this.conexao.prepareStatement(comando);
+				p.setInt(1, id);			
+				ResultSet rs = p.executeQuery();
+				
+				if(rs.next()){
+					quantidade_produtos = rs.getInt("quantidade_produtos");
+				}
+				
+				if(quantidade_produtos> 0) {
+					return false;
+				}else {
+					return true;
+				}
+			}catch(SQLException e) {	
+				e.printStackTrace();
+				return false;
+			}
+		
+	}
+	
+	
 }
