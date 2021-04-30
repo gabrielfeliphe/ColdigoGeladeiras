@@ -41,6 +41,10 @@ public class ProdutoRest extends UtilRest {
 			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao);
 
 			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
+			
+			boolean retornoProdutoExistente = jdbcProduto.verificaProdutoExistente(produto);
+			
+			if(retornoProdutoExistente == true) {
 
 			boolean retornoMarcaExiste = jdbcMarca.verificaExistencia(produto.getMarcaId());
 
@@ -62,6 +66,10 @@ public class ProdutoRest extends UtilRest {
 				conec.fecharConexao();
 				return this.buildResponse("Por favor recarregue a página, a marca não existe!");
 			}
+		}else {
+			conec.fecharConexao();
+			return this.buildResponse("Erro produto já existente!");
+		}
 
 		} catch (Exception e) {
 			e.printStackTrace();

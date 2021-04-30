@@ -87,21 +87,29 @@ public class MarcaRest extends UtilRest {
 			Marca marca = new Gson().fromJson(marcaParam, Marca.class);
 			Conexao conec = new Conexao();
 			Connection conexao = conec.abrirConexao();
-
 			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
-			boolean retorno = jdbcMarca.inserir(marca);
 
-			String msg = "";
+			boolean verificaMarcaExistente = jdbcMarca.verificaMarcaExistente(marca);
 
-			if (retorno) {
-				msg = "Marca cadastrada com sucesso!";
+			if (verificaMarcaExistente == true) {
+
+				boolean retorno = jdbcMarca.inserir(marca);
+
+				String msg = "";
+
+				if (retorno) {
+					msg = "Marca cadastrada com sucesso!";
+				} else {
+					msg = "Erro ao cadastrar marca.";
+				}
+
+				conec.fecharConexao();
+
+				return this.buildResponse(msg);
 			} else {
-				msg = "Erro ao cadastrar marca.";
+				conec.fecharConexao();
+				return this.buildResponse("Marca já existente. Tente novamente!");
 			}
-
-			conec.fecharConexao();
-
-			return this.buildResponse(msg);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -198,6 +206,40 @@ public class MarcaRest extends UtilRest {
 			System.out.println("marcaparam: " + marcaParam);
 
 			boolean retorno = jdbcMarca.alterar(marca);
+
+			String msg = "";
+
+			if (retorno) {
+				msg = "Marca alterada com sucesso!";
+			} else {
+				msg = "Erro ao alterar o marca.";
+			}
+
+			conec.fecharConexao();
+			return this.buildResponse(msg);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return this.buildErrorResponse(e.getMessage());
+		}
+	}
+	
+	@PUT
+	@Path("/alterarStatus/{id}")
+	@Consumes("application/*")
+	public Response alterarStatus(@PathParam("id") int id) {
+		try {
+
+			Conexao conec = new Conexao();
+			Connection conexao = conec.abrirConexao();
+			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
+			
+			System.out.println("id : "+id);
+
+
+			boolean retorno = jdbcMarca.verificaStatus(id);
+			
+			System.out.println("retorno : "+retorno);
 
 			String msg = "";
 

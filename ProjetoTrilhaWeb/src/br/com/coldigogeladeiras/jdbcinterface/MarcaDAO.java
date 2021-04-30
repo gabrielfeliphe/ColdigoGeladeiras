@@ -14,5 +14,8 @@ public interface MarcaDAO {
 	public boolean deletar(int id);
 	public Marca buscarPorId(int id);
 	public boolean alterar(Marca marca);
+	public boolean verificaMarcaExistente(Marca marca);
+	public boolean verificaProdutosCadastrados(int id);
+	public boolean verificaExistencia(int id);
 	
 }

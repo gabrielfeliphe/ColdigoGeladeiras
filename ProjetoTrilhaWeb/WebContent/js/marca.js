@@ -46,6 +46,7 @@ $(document).ready(function(){
 				
 				dados = JSON.parse(dados);
 				
+				
 				$("#listaMarcas").html(COLDIGO.marcas.exibirMarcas(dados));
 			},
 			error: function(info){
@@ -63,18 +64,31 @@ $(document).ready(function(){
 		"<tr>"+
 		"<th>Marca</th>"+
 		"<th class='acoes'>Ações</th>"+
+		"<th>Ativada</th>"
 		"</tr>";
 		
 		if(listaDeMarcas != undefined && listaDeMarcas.length > 0){
 			
+			
 			for(var i=0; i<listaDeMarcas.length; i++){
+				
+				var status="";
+				
+				if(listaDeMarcas[i].status == 1){
+					status = "checked";
+				}
+				
+				
 				tabela += "<tr>"+
 					"<td>"+listaDeMarcas[i].marcaNome+"</td>" +
 					"<td>" +
 						"<a onclick=\"COLDIGO.marcas.exibirEdicao('"+listaDeMarcas[i].id+"')\"><img src='../../imgs/edit.png' alt='Editar registro'></a>"+
 						"<a onclick=\"COLDIGO.marcas.excluir('"+listaDeMarcas[i].id+"')\"><img src='../../imgs/delete.png' alt='Excluir registro'></a>"+
 					"</td>" +
+	                 "<td><label class='switch'> <input type='checkbox' "+status+" onchange=COLDIGO.marcas.statusMarca('"+listaDeMarcas[i].id+"')> <span class='slider round'></span> </label></td>"+
 					"</tr>"
+	                
+					
 			}
 			
 			
@@ -129,12 +143,10 @@ $(document).ready(function(){
 			url: COLDIGO.PATH + "marca/buscarPorId",
 			data: "id="+id,
 			success: function(marca){
-				
-				console.log(marca);
-				
+					
 				document.frmEditaMarca.idMarca.value = marca.id;
 				document.frmEditaMarca.marcaId.value = marca.nome;
-				
+		
 				
 				var selMarcaEdicao = document.getElementById ('selMarcaEdicao');		
 				
@@ -192,4 +204,25 @@ $(document).ready(function(){
 		});
 		
 	};
+	
+	
+	COLDIGO.marcas.statusMarca = function(id){
+		
+		$.ajax({
+			type: "PUT",
+			url: COLDIGO.PATH + "marca/alterarStatus/"+id,
+			success: function(msg){
+				
+				console.log("sucesso!!!");
+				//COLDIGO.exibirAviso(msg);
+				//COLDIGO.marcas.buscarMarcas();
+				//$("#modalEditaMarca").dialog("close");
+			},
+			error: function(info){
+				COLDIGO.exibirAviso("Erro ao editar marca: "+info.status+" - "+info.statusText);
+			}
+		});
+	}
+	
+	
 });

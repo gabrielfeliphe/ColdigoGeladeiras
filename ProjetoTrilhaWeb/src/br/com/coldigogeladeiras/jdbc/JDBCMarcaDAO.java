@@ -57,9 +57,13 @@ public class JDBCMarcaDAO implements MarcaDAO{
 				int id = rs.getInt("id");
 				String nome = rs.getString("nome");
 				
+				
+				int status = rs.getInt("status");
+				
 				//Setando no objeto marca os valores encontrados
 				marca.setId(id);
 				marca.setNome(nome);
+				marca.setStatus(status);
 				
 				//Adição da instância contida no objeto Marca na lista de marcas
 				listMarcas.add(marca);
@@ -106,11 +110,13 @@ public class JDBCMarcaDAO implements MarcaDAO{
 						
 						int id = rs.getInt("id");
 						String marcaNome = rs.getString("marca");
+						int status = rs.getInt("status");
 											
 						marca = new JsonObject();
 						marca.addProperty("id", id);
-						
 						marca.addProperty("marcaNome",marcaNome);
+						
+						marca.addProperty("status", status);
 						
 						listaMarcas.add(marca);
 						
@@ -259,6 +265,67 @@ public class JDBCMarcaDAO implements MarcaDAO{
 				e.printStackTrace();
 				return false;
 			}
+		
+	}
+	
+	public boolean verificaMarcaExistente(Marca marca) { // verifica se a marca existe para evitar duplicação
+		
+		String comando = "SELECT marcas.nome FROM marcas";
+		PreparedStatement p;
+		
+		try {
+			
+			p = this.conexao.prepareStatement(comando);
+			
+			ResultSet rs = p.executeQuery();
+			
+			while(rs.next()) {
+				if(rs.getString("nome").equals(marca.getNome())) {
+					return false;
+				}
+				
+			}
+			
+			return true;
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+	}
+
+	public boolean verificaStatus(int id) {
+		
+		System.out.println("id jdbc: "+id);
+		
+		String comando = "SELECT status from marcas where id =?";
+		PreparedStatement p;
+		
+		try {
+			
+			p = this.conexao.prepareStatement(comando);
+			p.setInt(1,id);
+			ResultSet rs = p.executeQuery();
+			
+			while(rs.next()) {
+	
+				int status = rs.getInt("status");
+				
+				if(status == 1) {
+					return true; //1
+				}else{
+					return false; // 2
+				}
+				
+			}
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
 		
 	}
 	
