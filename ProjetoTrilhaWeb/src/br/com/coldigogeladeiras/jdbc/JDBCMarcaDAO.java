@@ -56,17 +56,18 @@ public class JDBCMarcaDAO implements MarcaDAO{
 				//Recebimento dos 2 dados retornados do BD para cada linha encontrada
 				int id = rs.getInt("id");
 				String nome = rs.getString("nome");
-				
-				
 				int status = rs.getInt("status");
 				
 				//Setando no objeto marca os valores encontrados
-				marca.setId(id);
-				marca.setNome(nome);
 				marca.setStatus(status);
 				
-				//Adição da instância contida no objeto Marca na lista de marcas
-				listMarcas.add(marca);
+				if(marca.getStatus() == 0) {
+					System.out.println("marca com status 0 pulada");
+				}else {
+					marca.setId(id); // POR QUESTÕES DE ECONOMIA DE PROCESSAMENTO VEM PRO ELSE 
+					marca.setNome(nome);
+					listMarcas.add(marca);
+				}
 			}
 			
 			
@@ -329,5 +330,22 @@ public class JDBCMarcaDAO implements MarcaDAO{
 		
 	}
 	
+	public boolean alteraMarcaStatus(int newStatus,int id) {
+		
+		String comando = "UPDATE marcas SET status=? WHERE id=?";
+		
+		PreparedStatement p;
+		try {
+			p = this.conexao.prepareStatement(comando);
+			p.setInt(1, newStatus);
+			p.setInt(2, id);
+			p.executeUpdate();
+
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
 	
 }

@@ -46,7 +46,7 @@ $(document).ready(function(){
 				}
 			},
 			error: function(info){
-				COLDIGO.exibirAviso("Erro ao buscar as marcas: "+ info.status+" - "+info.statusText);
+				COLDIGO.exibirAviso("Erro ao buscar as marcas: "+ info.status+" - "+info.statusText + " - " + info.responseText);
 				$(select).html("");
 				var option = document.createElement("option");
 				option.setAttribute ("value","");
@@ -88,7 +88,8 @@ $(document).ready(function(){
 
 				},
 				error: function(info){
-					COLDIGO.exibirAviso("Erro ao cadastrar um novo produto: "+info.status+" - "+info.statusText);
+					console.log("entrou no error + info : "+info)
+					COLDIGO.exibirAviso("Erro ao cadastrar um novo produto: "+info.status+" - "+info.statusText+" - " + info.responseText);
 					
 				}
 			});
@@ -114,7 +115,7 @@ $(document).ready(function(){
 			},
 			
 			error: function(info){
-				COLDIGO.exibirAviso("Erro ao consultar os contatos: "+ info.status+" - " + info.statusText);
+				COLDIGO.exibirAviso("Erro ao consultar os contatos: "+ info.status+" - " + info.statusText + " - " + info.responseText);
 			}
 				
 		});
@@ -180,7 +181,7 @@ $(document).ready(function(){
 								COLDIGO.produto.buscar();
 							},
 							error: function(info){
-								COLDIGO.exibirAviso("Erro ao excluir produto: "+ info.status + " - " + info.statusText);
+								COLDIGO.exibirAviso("Erro ao excluir produto: "+ info.status + " - " + info.statusText+ " - " + info.responseText);
 							},
 						});
 					},
@@ -246,7 +247,7 @@ $(document).ready(function(){
 			},
 			error: function(info){
 				
-				COLDIGO.exibirAviso("Erro ao buscar o produto para edição: "+info.status+" - "+info.statusText);
+				COLDIGO.exibirAviso("Erro ao buscar o produto para edição: "+info.status+" - "+info.statusText+ " - " + info.responseText);
 			}
 		});
 	};
@@ -271,7 +272,7 @@ $(document).ready(function(){
 				$("#modalEditaProduto").dialog("close");
 			},
 			error: function(info){
-				COLDIGO.exibirAviso("Erro ao editar produto: "+info.status+" - "+info.statusText);
+				COLDIGO.exibirAviso("Erro ao editar produto: "+info.status+" - "+info.statusText+ " - " + info.responseText);
 			}
 		});
 		

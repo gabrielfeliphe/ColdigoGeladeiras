@@ -108,7 +108,7 @@ public class MarcaRest extends UtilRest {
 				return this.buildResponse(msg);
 			} else {
 				conec.fecharConexao();
-				return this.buildResponse("Marca já existente. Tente novamente!");
+				return this.buildErrorResponse("Marca já existente. Tente novamente!");
 			}
 
 		} catch (Exception e) {
@@ -152,12 +152,12 @@ public class MarcaRest extends UtilRest {
 
 				} else {
 					conec.fecharConexao();
-					return this.buildResponse("Erro ao excluir a Marca! ela possui itens cadastrados");
+					return this.buildErrorResponse("Erro ao excluir a Marca! ela possui itens cadastrados");
 				}
 
 			} else {
 				conec.fecharConexao();
-				return this.buildResponse("Erro ao excluir a Marca! ela não existe no banco de dados.");
+				return this.buildErrorResponse("Erro ao excluir a Marca! ela não existe no banco de dados.");
 			}
 
 		} catch (Exception e) {
@@ -234,23 +234,37 @@ public class MarcaRest extends UtilRest {
 			Connection conexao = conec.abrirConexao();
 			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
 			
-			System.out.println("id : "+id);
-
-
-			boolean retorno = jdbcMarca.verificaStatus(id);
+			boolean verificaExistencia = jdbcMarca.verificaExistencia(id);
 			
-			System.out.println("retorno : "+retorno);
+			if(verificaExistencia == true) {
 
-			String msg = "";
+			boolean retornoStatus = jdbcMarca.verificaStatus(id);
+			
+			int newStatus = 0;
+			
+			if(retornoStatus == true) { // 
+				newStatus = 0;
+			}else {
+				newStatus = 1;
+			}
+			
+			
+			boolean alteraStatus = jdbcMarca.alteraMarcaStatus(newStatus,id);
 
-			if (retorno) {
-				msg = "Marca alterada com sucesso!";
+
+			if (alteraStatus == true) {
+				System.out.println("Alterado com sucesso");
+
 			} else {
-				msg = "Erro ao alterar o marca.";
+				System.out.println("falha ao alterar status");
 			}
 
 			conec.fecharConexao();
-			return this.buildResponse(msg);
+			return this.buildResponse(newStatus);
+			}else {
+				conec.fecharConexao();
+				return this.buildErrorResponse("Marca enexistente!");
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();

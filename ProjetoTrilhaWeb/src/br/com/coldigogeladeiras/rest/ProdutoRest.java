@@ -64,11 +64,11 @@ public class ProdutoRest extends UtilRest {
 				return this.buildResponse(msg);
 			} else {
 				conec.fecharConexao();
-				return this.buildResponse("Por favor recarregue a página, a marca não existe!");
+				return this.buildErrorResponse("Por favor recarregue a página, a marca não existe!");
 			}
 		}else {
 			conec.fecharConexao();
-			return this.buildResponse("Erro produto já existente!");
+			return this.buildErrorResponse("Erro produto já existente!");
 		}
 
 		} catch (Exception e) {

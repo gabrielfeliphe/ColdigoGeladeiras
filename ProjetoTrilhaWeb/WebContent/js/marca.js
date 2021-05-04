@@ -26,7 +26,7 @@ $(document).ready(function(){
 
 				},
 				error: function(info){
-					COLDIGO.exibirAviso("Erro ao cadastrar um nova marca: "+info.status+" - "+info.statusText);
+					COLDIGO.exibirAviso("Erro ao cadastrar um nova marca: "+info.status+" - "+info.statusText + " - " + info.responseText);
 					
 				}
 			});
@@ -50,7 +50,7 @@ $(document).ready(function(){
 				$("#listaMarcas").html(COLDIGO.marcas.exibirMarcas(dados));
 			},
 			error: function(info){
-				COLDIGO.exibirAviso("Erro ao consultar os contatos: "+ info.status+" - " + info.statusText);
+				COLDIGO.exibirAviso("Erro ao consultar os contatos: "+ info.status+" - " + info.statusText+ " - " + info.responseText);
 			},
 				
 		});	
@@ -85,7 +85,7 @@ $(document).ready(function(){
 						"<a onclick=\"COLDIGO.marcas.exibirEdicao('"+listaDeMarcas[i].id+"')\"><img src='../../imgs/edit.png' alt='Editar registro'></a>"+
 						"<a onclick=\"COLDIGO.marcas.excluir('"+listaDeMarcas[i].id+"')\"><img src='../../imgs/delete.png' alt='Excluir registro'></a>"+
 					"</td>" +
-	                 "<td><label class='switch'> <input type='checkbox' "+status+" onchange=COLDIGO.marcas.statusMarca('"+listaDeMarcas[i].id+"')> <span class='slider round'></span> </label></td>"+
+	                 "<td><label class='switch'> <input type='checkbox'id='botao_"+listaDeMarcas[i].id+"' "+status+" onchange=COLDIGO.marcas.statusMarca('"+listaDeMarcas[i].id+"')> <span class='slider round'></span> </label></td>"+
 					"</tr>"
 	                
 					
@@ -120,7 +120,7 @@ $(document).ready(function(){
 								COLDIGO.marcas.buscarMarcas();
 							},
 							error: function(info){
-								COLDIGO.exibirAviso("Erro ao excluir marca: "+ info.status + " - " + info.statusText);
+								COLDIGO.exibirAviso("Erro ao excluir marca: "+ info.status + " - " + info.statusText+ " - " + info.responseText);
 							},
 						});
 					},
@@ -175,7 +175,7 @@ $(document).ready(function(){
 			},
 			error: function(info){
 				
-				COLDIGO.exibirAviso("Erro ao buscar a marca para edição: "+info.status+" - "+info.statusText);
+				COLDIGO.exibirAviso("Erro ao buscar a marca para edição: "+info.status+" - "+info.statusText+ " - " + info.responseText);
 			}
 		});
 		
@@ -199,7 +199,7 @@ $(document).ready(function(){
 				$("#modalEditaMarca").dialog("close");
 			},
 			error: function(info){
-				COLDIGO.exibirAviso("Erro ao editar marca: "+info.status+" - "+info.statusText);
+				COLDIGO.exibirAviso("Erro ao editar marca: "+info.status+" - "+info.statusText+ " - " + info.responseText);
 			}
 		});
 		
@@ -212,14 +212,14 @@ $(document).ready(function(){
 			type: "PUT",
 			url: COLDIGO.PATH + "marca/alterarStatus/"+id,
 			success: function(msg){
-				
-				console.log("sucesso!!!");
-				//COLDIGO.exibirAviso(msg);
-				//COLDIGO.marcas.buscarMarcas();
-				//$("#modalEditaMarca").dialog("close");
+				console.log("alterado");
 			},
 			error: function(info){
-				COLDIGO.exibirAviso("Erro ao editar marca: "+info.status+" - "+info.statusText);
+				
+				COLDIGO.exibirAviso("Erro ao editar marca: "+info.responseText);
+				
+				statusBotao = document.getElementById('botao_'+id);
+				statusBotao.checked = !statusBotao.checked;
 			}
 		});
 	}
