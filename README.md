@@ -1,10 +1,5 @@
 <h1 align="center">Coldigo Geladeiras</h1>
 
-
-<h4 align="center"> 
-🚀 Em construção...  🚧
-</h4>
-
 Consiste em uma trilha onde é desenvolvido um site com integração de banco de dados MySql, com as tecnologias
 
 FrontEnd : HTML/CSS/JavaScript/JQueryUI/Ajax/JQuery
