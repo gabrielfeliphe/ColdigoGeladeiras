@@ -142,7 +142,7 @@ section h2, section h3{
 }
 
 .frmInserir{
-	width: 500px;
+	min-width: 500px;
 }
 
 .frmFiltrar{
@@ -176,6 +176,29 @@ section h2, section h3{
 	background-color: red;
 	color: #fff;
 	font-weight: bold;
+}
+
+.frmInserir .botaoAdd{
+	background-color: #008000;
+}
+
+.frmInserir .botaoRemove{
+	background-color: #ff0000;
+}
+
+.frmInserir fieldset{
+	margin: 0px auto;
+	width: fit-content;
+}
+
+.frmInserir .campoPequeno{
+	width: 100px;
+	padding: 2px 0;
+}
+
+.frmInserir .campoMedio{
+	width: 200px;
+	padding: 2px 0;
 }
 
 /* tabela de registros */ 
