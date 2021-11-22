@@ -4,44 +4,45 @@ $(document).ready(function(){
 	
 	COLDIGO.compra.carregarMarcas = function(id){
 		
-		var camposMarcas = document.getElementsByName('selMarca[]');
+		var camposMarcas = document.getElementsByName('selMarca[]');	
 		
 		$.ajax({
 			type: "GET",
 			url: COLDIGO.PATH + "marca/buscar",
 			
 			success: function(marcas){
-				
+				// esvazia o select do id recebido
 				$(camposMarcas[id]).html("");
-				
+				// se tiver mais de uma marca nesse objt
 				if(marcas.length){
+					// opcao vazia, aquele topo de escolha
 					var option= document.createElement("option");
 					option.setAttribute("value","");
 					option.innerHTML =("ESCOLHA");
-					
+					//coloca o campo no select correto
 					$(camposMarcas[id]).append(option);
-					
+					// adiciona as marcas
 					for(var i=0; i<marcas.length; i++){
+						//criamos as opções com id e nome da marca
 						var option = document.createElement("option");
 						option.setAttribute ("value",marcas[i].id);
 						option.innerHTML = (marcas[i].nome);
-						
+						// por fim ai insere no select
 						$(camposMarcas[id]).append(option);
 					}
-					
+					// se nao tiver marca no bd
 				}else{
-								
+					// cria a opção do topo			
 					var option = document.createElement("option");
 					option.setAttribute("value","");
 					option.innerHTML = ("Cadastre uma marca primeiro !");
-					
+					// pixa de vermelho a opção
 					$(camposMarcas[id]).addClass("aviso");
-					
+					//insere no select
 					$(camposMarcas[id]).append(option);
 				}
 			},
 			
-			//fim do sucess
 			error: function(info){
 				
 				console.log("entrou no exibir error")
