@@ -2,7 +2,6 @@ COLDIGO.compra = new Object();
 
 $(document).ready(function(){
 	
-	
 	COLDIGO.compra.carregarMarcas = function(id){
 		
 		var camposMarcas = document.getElementsByName('selMarca[]');
@@ -11,7 +10,8 @@ $(document).ready(function(){
 			type: "GET",
 			url: COLDIGO.PATH + "marca/buscar",
 			
-			sucess: function(marcas){
+			success: function(marcas){
+				
 				$(camposMarcas[id]).html("");
 				
 				if(marcas.length){
@@ -30,6 +30,7 @@ $(document).ready(function(){
 					}
 					
 				}else{
+								
 					var option = document.createElement("option");
 					option.setAttribute("value","");
 					option.innerHTML = ("Cadastre uma marca primeiro !");
@@ -42,6 +43,8 @@ $(document).ready(function(){
 			
 			//fim do sucess
 			error: function(info){
+				
+				console.log("entrou no exibir error")
 				
 				COLDIGO.exibirAviso("Erro ao buscar as marcas: "+info.status+" - "+info.statusText);
 				$(camposMarcas[id]).html("");
