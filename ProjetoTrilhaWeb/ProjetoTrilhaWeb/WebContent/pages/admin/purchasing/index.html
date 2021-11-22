@@ -1,0 +1,53 @@
+<h2>Registro de compras</h2>
+<form name="frmAddCompra" id="addCompra" class="frmInserir">
+	<fieldset>
+		<legend>Compra</legend>
+		<table>
+			<tr>
+				<th>Data</th>
+				<td>
+					<input type="date" name="txtData">
+				</td>
+			</tr>
+			<tr>
+				<th>fornecedor</th>
+				<td>
+					<input type="text" name="txtFornecedor">
+				</td>	
+			</tr>
+		</table>
+	</fieldset>
+	<fieldset>
+		<legend>Produtos</legend>
+		<table>
+			<tr>
+				<th>Categoria</th>
+				<th>Marca</th>
+				<th>Modelo</th>
+				<th>Quantidade</th>
+				<th>Valor (R$)</th>
+				<th><button  type="button" name="addProduto" class="botaoAdd">+</button></th>
+			</tr>
+			<tr class="detalhes">
+				<td>
+					<select name="selCategoria[]" class="campoPequeno">
+						<option value="">Selecione</option>
+						<option value="1">Geladeira</option>
+						<option value="2">Freezer</option>
+					</select>	
+				</td>
+				<td>
+					<select name="selMarca[]" class="campoMedio">
+						<option value="" class="buscando">Aguarde, buscando marcas...</option>
+					</select>	
+				</td>
+				<td>
+					<select name="selProduto[]" class="campoMedio">
+						<option value="">Selecione categoria e marca</option>
+					</select>
+				</td>
+				<	
+		</table>
+	</fieldset>
+
+</form>
