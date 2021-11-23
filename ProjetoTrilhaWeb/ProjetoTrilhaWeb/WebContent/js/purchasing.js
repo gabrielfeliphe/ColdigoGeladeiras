@@ -191,6 +191,27 @@ $(document).ready(function(){
 	}
 	
 	
+	COLDIGO.compra.validaDataFornecedor = function(){
+		
+		var validaData = document.frmAddCompra.txtData.value;
+		var validaFornecedor = document.frmAddCompra.txtFornecedor.value;
+		var retorno;
+		
+		
+		if(validaData==""){
+			COLDIGO.exibirAviso("A data não foi preenchida")
+			retorno = false;
+		}else if(validaFornecedor==""){
+			COLDIGO.exibirAviso("O campo do fornecedor não foi preenchido")
+			retorno = false;
+		}else{
+		retorno = true;
+		}
+		
+		return retorno;
+	}
+	
+	
 	COLDIGO.compra.validaDetalhe = function(){
 		var produtosValidar = document.getElementsByName('selProduto[]');
 		
@@ -210,7 +231,10 @@ $(document).ready(function(){
 	}
 	
 	COLDIGO.compra.cadastrar = function(){
-		if(COLDIGO.compra.validaDetalhe()){
+		
+		console.log(COLDIGO.compra.validaDataFornecedor())
+		
+		if((COLDIGO.compra.validaDetalhe()==true)&&(COLDIGO.compra.validaDataFornecedor()==true)){
 			var compra = new Object();
 			compra.data = document.frmAddCompra.txtData.value;
 			compra.fornecedor = document.frmAddCompra.txtFornecedor.value;
