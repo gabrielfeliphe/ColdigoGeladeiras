@@ -191,6 +191,56 @@ $(document).ready(function(){
 	}
 	
 	
+	COLDIGO.compra.validaDetalhe = function(){
+		var produtosValidar = document.getElementsByName('selProduto[]');
+		
+		var qtdeValidar = document.getElementsByName("txtQuantidade[]");
+		var valorValidar = document.getElementsByName("txtValor[]");
+		
+		for(var i=0;i<produtosValidar.length;i++){
+			var linha= i+1;
+			
+			if((produtosValidar[i].value=="")||(qtdeValidar[i].value=="")||(valorValidar[i].value=="")){
+				COLDIGO.exibirAviso("A linha"+linha+" não foi completamente preenchida.");
+				
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	COLDIGO.compra.cadastrar = function(){
+		if(COLDIGO.compra.validaDetalhe()){
+			var compra = new Object();
+			compra.data = document.frmAddCompra.txtData.value;
+			compra.fornecedor = document.frmAddCompra.txtFornecedor.value;
+			var produtos = document.getElementsByName('selProduto[]');
+			var quantidades = document.getElementsByName('txtQuantidade[]');
+			var valores = document.getElementsByName('txtValor[]');
+			compra.produtos = new Array(produtos.length);
+			for(var i=0;i<produtos.length;i++){
+				compra.produtos[i]=new Object();
+				compra.produtos[i].idProduto = produtos[i].value;
+				compra.produtos[i].quantidade = quantidades[i].value;
+				compra.produtos[i].valor = valores[i].value;
+			}
+			
+			console.log(compra);
+			
+			$.ajax({
+				type:"POST",
+				url: COLDIGO.PATH+"compra/inserir",
+				data:JSON.stringify(compra),
+				success: function(msg){
+					COLDIGO.exibirAviso(msg);
+				},
+				error: function(info){
+					COLDIGO.exibirAviso("Erro ao cadastrar um novo produto: "+info.status+" - "+info.statusText);
+				}
+			});
+		}
+	}
+	
 	
 	
 });
