@@ -2,6 +2,26 @@ COLDIGO.compra = new Object();
 
 $(document).ready(function(){
 	
+	categoriaAntigo = new Array();
+	categoriaAntigo[0] = "";
+	marcaAntigo = new Array();
+	marcaAntigo[0] = "";
+	
+	
+	COLDIGO.compra.guardaValores = function(){
+		
+		var categoriaAtual = document.getElementsByName('selCategoria[]');
+		var marcaAtual = document.getElementsByName('selMarca[]');
+		
+		for(var i=0;i<categoriaAtual.length;i++){
+			
+			categoriaAntigo[i] = categoriaAtual[i].value;
+			marcaAntigo[i] = marcaAtual[i].value;
+		}
+	}
+	
+	
+	
 	COLDIGO.compra.carregarMarcas = function(id){
 		
 		var camposMarcas = document.getElementsByName('selMarca[]');	
@@ -71,6 +91,9 @@ $(document).ready(function(){
 		novoCampo.find("input").val("");
 		//Insere o clone na pagina, apos a ultima linha existente
 		novoCampo.insertAfter("tr.detalhes:last");
+		
+		COLDIGO.compra.guardaValores();
+		
 	});
 	
 	COLDIGO.compra.removeCampo = function(botao){
@@ -79,9 +102,95 @@ $(document).ready(function(){
 			//parent pega o elemento e vê quem é o pai
 			// uma escadinha inversa nos elementos do DOM
 			$(botao).parent().parent().remove();
+			
+			COLDIGO.compra.guardaValores();
+			
 		}else{
 			COLDIGO.exibirAviso("A última linha não pode ser removida");
 		}
 	}
+	
+	
+	COLDIGO.compra.carregarProdutos = function(){
+		
+		var selectProduto = document.getElementsByName('selProduto[]');
+		var marcaAtual = document.getElementsByName('selMarca[]');
+		var categoriaAtual = document.getElementsByName('selCategoria[]');
+		
+		for(var j=0;j<selectProduto.length;j++){
+			
+			if((marcaAntigo[j] != marcaAtual[j].value)||(categoriaAntigo[j] != categoriaAtual[j].value)){
+				linhaAlterada = j;
+			}
+		}
+		
+		if((marcaAtual[linhaAlterada].value=="")||(categoriaAtual[linhaAlterada].value=="")){
+			COLDIGO.compra.guardaValores();
+			
+			return false;
+		}
+		
+		
+		marcaCod = marcaAtual[linhaAlterada].value;
+		categoriaCod = categoriaAtual[linhaAlterada].value;
+		
+		$(selectProduto[linhaAlterada]).html("<option>Aguarde</option>");
+		
+		
+		$.ajax({
+			type:"GET",
+			url: COLDIGO.PATH+"produto/buscarParaVenda",
+			data:"categoria="+categoriaCod+"&idMarca="+marcaCod,
+			
+			success: function(produtos){
+				
+				produtos = JSON.parse(produtos);
+				
+				$(selectProduto[linhaAlterada]).html("");
+				
+				
+				if(produtos.length){
+					
+					$(selectProduto[linhaAlterada]).removeClass("aviso");
+					
+					var option = document.createElement("option");
+					option.setAttribute = ("value","");
+					option.innerHTML = ("Escolha");
+					$(selectProduto[linhaAlterada]).append(option);
+					
+					for(var i=0;i<produtos.length;i++){
+						var option = document.createElement("option");
+						option.setAttribute("value",produtos[i].id);
+						option.innerHTML = (produtos[i].modelo);
+						$(selectProduto[linhaAlterada]).append(option);
+					}
+				}else{
+					
+					var option = document.createElement("option");
+					option.setAttribute("value","");
+					option.innerHTML = ("não há produtos correspondentes!");
+					$(selectProduto[linhaAlterada]).append(option);
+					
+					$(selectProduto[linhaAlterada]).addClass("aviso");
+				}
+				
+			},
+			error: function(info){
+				COLDIGO.exibirAviso("Erro ao buscar os produtos: "+info.status+" - "+info.statusText);
+				
+				$(selectProduto[linhaAlterada]).html("");
+				var option = document.createElement("option");
+				option.setAttribute ("value", "");
+				option.innerHTML = ("Erro ao carregar produtos!");
+				$(selectProduto[linhaAlterada]).append(option);
+				$(selectProduto[linhaAlterada]).addClass("aviso");
+			}
+		});
+		
+		COLDIGO.compra.guardaValores();
+	}
+	
+	
+	
 	
 });

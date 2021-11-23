@@ -184,5 +184,32 @@ public class ProdutoRest extends UtilRest {
 			return this.buildErrorResponse(e.getMessage());
 		}
 	}
+	
+	
+	@GET
+	@Path("/buscarParaVenda")
+	@Consumes("application/*")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response buscarParaVenda(@QueryParam("idMarca") int idMarca,@QueryParam("categoria") int categoria) {
+		
+		try {
+			List<JsonObject> listaProdutos = new ArrayList<JsonObject>();
+			
+			Conexao conec = new Conexao();
+			Connection conexao = conec.abrirConexao();
+			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao);
+			listaProdutos = jdbcProduto.buscarParaVenda(idMarca,categoria);
+			conec.fecharConexao();
+			String json = new Gson().toJson(listaProdutos);
+			return this.buildResponse(json);
+			
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+			return this.buildErrorResponse(e.getMessage());
+		}
+		
+		
+	}
 
 }
