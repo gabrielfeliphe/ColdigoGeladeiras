@@ -40,9 +40,9 @@ public class JDBCProdutoCompraDAO implements ProdutoCompraDAO{
 		List<JsonObject> listaProdutos = new ArrayList<JsonObject>();
 		JsonObject produto = null;
 		
-		String comando = "SELECT produtos.categoria, marcas.nome, AS marca, produtos.modelo, compras_has_produtos.valor,"+
-				"compras_has_produtos.quantidade FROM bdcoldigo.compras_has_produtos INNER JOIN produtos ON produtos.id=compras_has_produtos.produtos_id"+
-				" INNER JOIN marcas ON marcas.id=produtos.marcas_id WHERE compras_id='"+idCompra+"'";
+		String comando = "SELECT produtos.categoria, marcas.nome AS marca, produtos.modelo, compras_has_produtos.valor," + 
+				"compras_has_produtos.quantidade FROM bdcoldigo.compras_has_produtos INNER JOIN produtos ON produtos.id=compras_has_produtos.produtos_id" + 
+				" INNER JOIN marcas ON marcas.id = produtos.marcas_id WHERE compras_id = '"+idCompra+"'";
 		
 	
 		try {
