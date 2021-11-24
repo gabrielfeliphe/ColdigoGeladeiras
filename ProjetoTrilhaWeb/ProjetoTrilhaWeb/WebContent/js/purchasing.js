@@ -97,6 +97,7 @@ $(document).ready(function(){
 	});
 	
 	COLDIGO.compra.removeCampo = function(botao){
+		
 		if($("tr.detalhes").length > 1){
 			//remove a linha que contem o botao
 			//parent pega o elemento e vê quem é o pai
@@ -262,6 +263,12 @@ $(document).ready(function(){
 					COLDIGO.exibirAviso("Erro ao cadastrar um novo produto: "+info.status+" - "+info.statusText);
 				}
 			});
+		}
+	}
+	
+	COLDIGO.compra.limparFrm = function(){	
+			while($("tr.detalhes").length > 1){
+			$("tr.detalhes").last().remove();
 		}
 	}
 	

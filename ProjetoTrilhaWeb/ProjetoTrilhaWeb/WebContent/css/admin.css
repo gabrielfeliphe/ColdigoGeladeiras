@@ -325,3 +325,11 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+#listaCompras table{
+	margin-bottom: 10px;
+}
+
+#listaCompras tabable th{
+	width:20%;
+}
