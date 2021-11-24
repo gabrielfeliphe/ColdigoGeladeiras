@@ -7,7 +7,8 @@ $(document).ready(function(){
 			type:"GET",
 			url: COLDIGO.PATH+"compra/relatorio",
 			success: function (dados){
-				console.log(dados);
+				dados = JSON.parse(dados);
+				$("#listaCompras").html(COLDIGO.relatorioCompra.exibir(dados));
 			},
 			error: function(info){
 				COLDIGO.exibirAviso("Erro ao consultar as compras: "+ info.status +" - "+info.statusText)
